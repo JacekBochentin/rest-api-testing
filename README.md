@@ -55,7 +55,7 @@ This project demonstrates how to test a simple REST API using Robot Framework. T
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/rest-api-testing.git
+    git clone https://github.com/JacekBochentin/rest-api-testing.git
     cd rest-api-testing
     ```
 
@@ -90,9 +90,9 @@ This project demonstrates how to test a simple REST API using Robot Framework. T
 ## Project Structure
 
 - `rest_api.js`: The REST API code.
-- [keywords.py](http://_vscodecontentref_/2): Custom Python keywords for Robot Framework.
-- [test_rest_api.robot](http://_vscodecontentref_/3): Robot Framework test cases.
-- [README.md](http://_vscodecontentref_/4): This file.
+- `keywords.py`: Custom Python keywords for Robot Framework.
+- `test_rest_api.robot`: Robot Framework test cases.
+- `README.`]: This file.
 
 ## Endpoints
 
