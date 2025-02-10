@@ -3,6 +3,26 @@ const app = express();
 
 app.use(express.json());
 
+// Middleware do logowania requestów i odpowiedzi
+app.use((req, res, next) => {
+  console.log('--- Request ---');
+  console.log(`Method: ${req.method}`);
+  console.log(`URL: ${req.originalUrl}`);
+  console.log('Headers:', req.headers);
+  console.log('Body:', req.body);
+
+  // Przechwyć oryginalną funkcję `res.send`, aby logować odpowiedzi
+  const originalSend = res.send;
+  res.send = function (body) {
+    console.log('--- Response ---');
+    console.log(`Status Code: ${res.statusCode}`);
+    console.log('Body:', body);
+    originalSend.call(this, body);
+  };
+
+  next(); // Przekaż kontrolę do następnego middleware/endpointu
+});
+
 // Initial list of users
 let users = [
   { id: 1, name: "Jan Kowalski", age: 30, city: "Warszawa", deleted: false },
@@ -15,6 +35,11 @@ let users = [
 app.get('/users', (req, res) => {
   const activeUsers = users.filter(u => !u.deleted);
   res.json(activeUsers);
+});
+
+// Get all users (including deleted)
+app.get('/users/all', (req, res) => {
+  res.json(users); // Zwraca wszystkich użytkowników, łącznie z usuniętymi
 });
 
 // Get user by ID (only active users)
@@ -77,10 +102,6 @@ app.delete('/users/:id', (req, res) => {
   }
 });
 
-// Get all users (including deleted)
-app.get('/users/all', (req, res) => {
-  res.json(users);
-});
 
 // Reset REST API state
 app.post('/reset', (req, res) => {

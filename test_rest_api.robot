@@ -1,30 +1,33 @@
 *** Settings ***
-Library    keywords.RESTAPIKeywords
-Suite Setup       Reset REST API
-Suite Teardown    Reset REST API
+Library    keywords.py    WITH NAME    API    # Użyj WITH NAME, aby nadać alias
+# Suite Setup       API.Reset Rest Api
+# Suite Teardown    API.Reset Rest Api
+Test Setup        API.Reset Rest Api
+Test Teardown     API.Reset Rest Api
 
 *** Test Cases ***
 Get All Users
-    Get Users
+    API.Get Users
 
 Get User By ID
-    Get User By Id    1    expected_name=Jan Kowalski
+    API.Get User By Id    1    expected_name=Jan Kowalski
 
 Create New User
-    Create User    name=Marek Nowak    age=40    city=Poznań
+    API.Create User    name=Marek Nowak    age=40    city=Poznań
 
 Update User
-    Update User    1    name=Jan Nowak    age=31    city=Warszawa
+    API.Update User    1    name=Jan Nowak    age=31    city=Warszawa
 
 Patch User
-    Patch User    2    age=26
+    API.Patch User    2    age=26
 
 Soft Delete User
-    Soft Delete User    1
-    ${users} =    Get All Users
+    API.Soft Delete User    1
+    ${users} =    API.Get Users
     Should Not Contain    ${users}    {"id": 1, "name": "Jan Kowalski", "age": 30, "city": "Warszawa", "deleted": false}
 
 Get All Users Including Deleted
-    Soft Delete User    1
-    ${users} =    Get All Users Including Deleted
-    Should Contain    ${users}    {"id": 1, "name": "Jan Kowalski", "age": 30, "city": "Warszawa", "deleted": true}
+    API.Soft Delete User    1
+    ${users} =    API.Get All Users Including Deleted
+    ${expected_user} =    Evaluate    {"id": 1, "name": "Jan Kowalski", "age": 30, "city": "Warszawa", "deleted": True}
+    Should Contain    ${users}    ${expected_user}
